@@ -232,7 +232,7 @@ export default function Page(props: any) {
           userId: userData.id,
           password: Password
         };
-      const response = await axios.post('${url}/chat/setRoomToProtected', data, { withCredentials: true });
+      const response = await axios.post(`${url}/chat/setRoomToProtected`, data, { withCredentials: true });
       
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -254,7 +254,7 @@ export default function Page(props: any) {
           roomId: groupData?.id,
           password: Password
         };
-      const response = await axios.post('${url}/chat/changeRoomPassword', data, { withCredentials: true });
+      const response = await axios.post(`${url}/chat/changeRoomPassword`, data, { withCredentials: true });
       toast.success("The password have been changed successfully");
 
     } catch (error: any) {
@@ -275,32 +275,13 @@ export default function Page(props: any) {
       username: userData.username,
       token: token
     });
-<<<<<<< Updated upstream
-    router.push('/Chat');
-
-    toast.success(`You left ${groupData.name}`)
-    dispatch(setRefreshConvos(!refreshConvos))
-  }
-
-  const Play = async (tar: any): Promise<void> => {
-    console.log("invite to play");
-    console.log(userData.id);
-    console.log(tar);
-    await axios.post(`http://localhost:4000/user/sendPlayAgain`, { sender: userData.id, target: tar }, { withCredentials: true });
-
-    for (let i = 0; i < 10000000; i++) {
-      i *= 1;
-    }
-    console.log("connected2")
-=======
   }
   
 const Play = async (tar:any):Promise<void> => 
   {
     await axios.post(`${url}/user/sendPlayAgain`,{ sender: userData.id, target:tar}, { withCredentials: true });
->>>>>>> Stashed changes
 
-    const socket = io('${url}', {
+    const socket = io(`${url}`, {
       path: '/play',
       query: {
         token: "token_data",
@@ -325,7 +306,6 @@ const Play = async (tar:any):Promise<void> =>
     sendPlayRequest();
   }, [clicked]);
 
-<<<<<<< Updated upstream
 
   // const inviteToPlay = async (target:string) => {
   //   try {
@@ -374,37 +354,6 @@ const Play = async (tar:any):Promise<void> =>
                       )
                     }
                   </>
-=======
-  return (
-    groupData === 404 ?
-    <NotUser/>
-    :((groupData.type === "DM" && isLoading) ?
-
-      (
-        <div className='h-screen w-full flex flex-1 relative z-10'>
-          <div className='w-full h-full relative'>
-            <div className='header flex items-center h-[130px] border-b-[2px] bg-opacity-[50%] relative pl-14 md:pl-2'>
-              <div className='z-10 relative'><img className={`min-w-[50px] max-w-[50px] h-[50px] rounded-[25px] mr-3`} src={`${groupData.avatar}`} alt={`${groupData.avatar}`} />
-                <div className={`absolute w-[10px] h-[10px] ${groupData.members[0].status === "Online" ? "bg-green-700" : groupData.members[0].status === "inGame" ? "bg-red-600" : "bg-gray-600"} rounded-full right-[17%] top-2`}></div>
-              </div>
-              <div className='text-[40px] font-sans-only text-[#2E2E2E] opacity-[76%]'>{groupData.name}</div>
-              <button className='flex items-center justify-center absolute rounded-[20px] active:bg-[#c2c2c2] right-8 p-4 h-[50px] w-[50px]' onClick={() => setDMsSettings(!DMsSettings)}> <img className='w-[33px] h-[33px] ' src="/3no9at.svg" alt="/3no9at.svg" /> </button>
-              {DMsSettings &&
-              <>
-                {(blockType !== "friends") ?
-                  <div className='rounded-[20px] w-[200px] h-[70px] top-[90px] right-8 absolute mr-[10px] flex flex-col items-center justify-evenly border-[1px] bg-white'>
-                    <Link href={`/Profile/${groupData.members[0].id}`} className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px]'> visit profile </Link>
-                  </div>
-                  :
-                  ( 
-                    <div className='rounded-[20px] w-[200px] h-[140px] top-[90px] right-8 absolute mr-[10px] flex flex-col items-center justify-evenly border-[1px] bg-white'>
-                      <Link href="../Play">
-                        <button className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px] '  onClick={() => Play(groupData.members[0].id)}>Invite to Play</button>
-                      </Link>
-                    <Link href={`/Profile/${groupData.members[0].id}`} className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px]'> visit profile </Link>
-                    </div>
-                  )
->>>>>>> Stashed changes
                 }
               </div>
 
@@ -513,7 +462,6 @@ const Play = async (tar:any):Promise<void> =>
               </div>
             </div>
           </div>
-<<<<<<< Updated upstream
         )
         :
         (
@@ -524,19 +472,6 @@ const Play = async (tar:any):Promise<void> =>
                 <div> <img className='h-[90px] w-[90px] ml-1 mr-3 rounded-[50px] object-fill' src={`http://localhost:4000/${groupData.avatar}`} alt={`http://localhost:4000/${groupData.avatar}`} /></div>
                 <div className='text-[40px] font-sans-only text-[#2E2E2E] opacity-[76%]'>{groupData.name}</div>
               </div>
-=======
-        </div>
-      )
-      :
-      (
-
-        <div className='h-screen w-full flex flex-1 relative z-10'>
-          <div className='w-full h-full relative'>
-            <div className='header flex items-center h-[130px] border-b-[2px] bg-opacity-[50%] pl-14 md:pl-2'>
-              <div> <img className='h-[90px] w-[90px] ml-1 mr-3 rounded-[50px] object-fill' src={`${url}/${groupData.avatar}`} alt={`${url}/${groupData.avatar}`} /></div>
-              <div className='text-[40px] font-sans-only text-[#2E2E2E] opacity-[76%]'>{groupData.name}</div>
-            </div>
->>>>>>> Stashed changes
 
               <div className='chatHeight overflow-hidden overflow-y-visible overflow-x-hidden no-scrollbar mt-[20px] '>
                 <div className='flex flex-col'>
@@ -634,7 +569,6 @@ const Play = async (tar:any):Promise<void> =>
                 <img src="/leftArrow.svg" alt="/leftArrow.svg" className='w-[30px] h-[30px] absolute right-0' />
               </label>
 
-<<<<<<< Updated upstream
               <div className="fixed top-0 right-0 z-20 w-full backdrop-blur-[8px] h-full transition-all duration-500 transform translate-x-full shadow-lg peer-checked:translate-x-0">
                 <div className="flex absolute right-0 px-6 py-4 w-[400px] border-l-[1px] h-full bg-[#eff5ff]">
                   <div className='flex flex-1 flex-col items-center  backdrop-blur-sm '>
@@ -691,66 +625,6 @@ const Play = async (tar:any):Promise<void> =>
                                               <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]'> visit profile </Link>
                                             </>
                                           }
-=======
-            <div className="fixed top-0 right-0 z-20 w-full backdrop-blur-[8px] h-full transition-all duration-500 transform translate-x-full shadow-lg peer-checked:translate-x-0">
-              <div className="flex absolute right-0 px-6 py-4 w-[400px] border-l-[1px] h-full bg-[#eff5ff]">
-                <div className='flex flex-1 flex-col items-center  backdrop-blur-sm '>
-                  <div> <img className=' h-[150px] w-[150px] rounded-[50%] mt-[100px]' src={`${url}/${groupData?.avatar}`} alt={`${url}/${groupData?.avatar}`} /></div>
-                  <div className='font-normal text-[40px] font-sans-only text-[#2E2E2E] mb-9'>{groupData?.name}</div>
-                  <div className='flex flex-col h-[100%] relative w-[100%] gap-8'>
-                    <div className='flex flex-col max-h-[30%] bg-[#e6ebfe] rounded-[13px] pb-4 hover:bg-[#d6dbed] transition-all duration-500 h-[400px]'>
-                      <div className='flex p-4 py-5 gap-2 font-bold'> <img className='h-[24px] w-[24px]' src="/creatg.svg" alt="/creatg.svg" />  Members </div>
-                      <div className='rounded-t-[15px] rounded-b-[15px] px-3 bg-inherit flex flex-col gap-[2px] w-full no-scrollbar overflow-y-auto overflow-x-hidden h-full' >
-                        {(groupData?.members) && groupData?.members.map((members: any, index: any) => (
-                          <div key={index} className='w-[100%] py-4 mb-1 mt-1 flex items-center justify-between bg-white max-w-[350px] px-4 rounded-[10px] relative '>
-                            <div className='flex overflow-visible'>
-                              <div className='z-10 relative'><img className={`min-w-[50px] max-w-[50px] h-[50px] rounded-[25px] mr-3`} src={`${members.avatar}`} alt={`${members.avatar}`} />
-                                <div className={`absolute w-[10px] h-[10px] ${members.status === "Online" ? "bg-green-700" : members.status === "inGame" ? "bg-red-600" : "bg-gray-600"} rounded-full right-[17%] top-2`}></div>
-                              </div>
-                              <div className='z-20'>
-                                <div className='font-bold'>{members.username}</div>
-                                {
-                                  (groupData?.owner === members.id) ? (<div className='text-gray-400 text-[14px] self-start'>Owner</div>)
-                                    : ((checkIfAdmin(members.id)) ? (<div className='text-gray-400 text-[14px] self-start'>Admin</div>)
-                                      : null)
-                                }
-                              </div>
-                              {memberSettings[index] && (
-                                <>
-                                  {checkIfAdmin(members.id) && (checkIfAdmin(userData.id) || (groupData?.owner === userData.id)) ?
-                                    (
-                                      <div className='font-semibold absolute right-12 top-4 bg-[#e6ebfe] flex flex-col border-[1px] rounded-[10px] p-1 z-[1000]'>
-                                        {((groupData?.owner === userData.id) || (checkIfAdmin(userData.id))) ?
-                                          <>
-                                            {checkIfUserMuted(groupData?.members[index].id) ?
-                                              <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("unmute", groupData?.members[index], index, "") }}>unmute</div>
-                                              :
-                                                <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("mute", groupData?.members[index], index, "60") }}>mute for 1m</div>
-                                            }
-                                            <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("kick", groupData?.members[index], index, "") }}>kick</div>
-                                            <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("ban", groupData?.members[index], index, "") }}>ban</div>
-                                            {groupData?.owner === userData.id && (
-                                              checkIfAdmin(groupData?.members[index].id) ?
-                                                <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("removeAdmin", groupData?.members[index], index, "") }}>remove admin</div>
-                                                :
-                                                <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("makeAdmin", groupData?.members[index], index, "") }}>make admin</div>
-                                            )
-                                            }
-                                            <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]'> visit profile </Link>
-                                          </>
-                                          :
-                                          <>
-                                            <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]'> visit profile </Link>
-                                          </>
-                                        }
-                                      </div>
-
-                                    )
-                                    : groupData?.owner === members.id ?
-                                      (
-                                        <div className='font-semibold absolute right-12 top-4 bg-[#e6ebfe] flex flex-col border-[1px] rounded-[10px] p-1 z-[1000]'>
-                                          <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]'> visit profile </Link>
->>>>>>> Stashed changes
                                         </div>
 
                                       )
@@ -768,7 +642,6 @@ const Play = async (tar:any):Promise<void> =>
                                                 <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("unmute", groupData.members[index], index, "") }}>unmute</div>
                                                 :
                                                 <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("mute", groupData?.members[index], index, "60") }}>mute for 1m</div>
-<<<<<<< Updated upstream
                                               }
                                               <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("kick", groupData.members[index], index, "") }}>kick</div>
                                               <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("ban", groupData?.members[index], index, "") }}>ban</div>
@@ -792,27 +665,6 @@ const Play = async (tar:any):Promise<void> =>
                               {(members.id !== userData.id) &&
                                 <button onClick={() => handleToggleSettings(index)}> <img className='w-[20px] h-[20px] ' src="/3no9at.svg" alt="/3no9at.svg" /></button>
                               }
-=======
-                                            }
-                                            <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("kick", groupData.members[index], index, "" )}}>kick</div>
-                                            <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("ban", groupData?.members[index], index, "") }}>ban</div>
-                                            {checkIfAdmin(groupData.members[index].id) ?
-                                              <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("removeAdmin", groupData.members[index], index, "")}}>remove admin</div>
-                                              :
-                                              <div className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' onClick={() => { handleChannelCommands("makeAdmin", groupData.members[index], index, "")}}>make admin</div>
-                                            }
-                                            <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' > visit profile </Link>
-                                          </>
-                                          :
-                                          <>
-                                            <Link href={`/Profile/${members.id}`} className='hover:text-[#8d94af] cursor-pointer py-2 px-2 rounded-[8px]' > visit profile </Link>
-                                          </>
-                                        }
-                                      </div>
-                                  }
-                                </>
-                              )}
->>>>>>> Stashed changes
                             </div>
                           ))}
                         </div>
