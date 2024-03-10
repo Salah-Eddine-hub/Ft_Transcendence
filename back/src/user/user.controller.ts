@@ -45,7 +45,7 @@ export class UserController {
                 where: { id: userDto.id },
                 data: { username: userDto.username, firstName: userDto.firstName, lastName: userDto.lastName, avatar: userDto.avatar }
             });
-            this.eventEmitter.emit("refreshAll");
+            // this.eventEmitter.emit("refreshAll");
 
             return await res.send({ info: true, message: "Username updated successfully" });
         }

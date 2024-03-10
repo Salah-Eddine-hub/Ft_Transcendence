@@ -21,7 +21,6 @@ export default function PersonnelInfo() {
     profileSelector.username || ""
   );
   const dispatch = useDispatch();
-  const presetKey = "r0th9bpt"; 
   const _api = axios.create();
 
   useEffect(() => {
@@ -42,7 +41,9 @@ export default function PersonnelInfo() {
     }
   }, [profileSelector]);
 
-  const url = process.env.API_BASE_URL 
+  
+
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
   const handleAvatarChange = async (e: any) => {
     try {
@@ -51,10 +52,10 @@ export default function PersonnelInfo() {
       if (!file) return;
       const formDate = new FormData();
       formDate.append("file", file);
-      formDate.append("upload_preset", presetKey);
+      formDate.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_KEY!);
 
       const res = await _api.post(
-        `${process.env.API_Cloudinary_URL}`,
+        process.env.NEXT_PUBLIC_CLOUDINARY_URL!,
         formDate,
         { withCredentials: false }
       );
@@ -99,7 +100,8 @@ export default function PersonnelInfo() {
         updatedProfileData
         );
         
-        dispatch(setProfileData(updatedProfileData));
+        dispatch(setProfileData(
+        {...profileSelector,updatedProfileData}));
       toast.success("Your information has been changed successfully");
     } catch (error:any) {
       if (error.response.status === 400 || error.response.status === 401) {

@@ -12,9 +12,6 @@ const nextConfig = {
 				}
         ],
     },
-	env:{
-		API_BASE_URL: process.env.SERVER_BACKEND
-	}
 };
 
 module.exports = nextConfig

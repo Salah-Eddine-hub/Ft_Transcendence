@@ -21,7 +21,7 @@ export default function SearchPanel() {
   const [myNotification, setMyNotifications] = useState<[]>();
   const [invitToPlay, setInvitToPlay] = useState<[]>();
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
   useEffect(() => {
     const getUsers = async (searchForUser: string) => {
@@ -99,7 +99,6 @@ export default function SearchPanel() {
     try {
       await axios.post(`${url}/user/acceptInviteToPlay`, { notif, myId: myData.id }, { withCredentials: true });
       setRefreshNoifications(!refreshNotifs);
-      console.log("connected4")
 
       const socket = io(`${url}`, {
         path: '/play',
@@ -176,7 +175,7 @@ export default function SearchPanel() {
         {isClicked && (
           <div className='mt-2 h-[400px] 2sm:w-[400px] sm:w-[500px] w-full bg-white absolute -right-4 sm:right-0 z-[1000] transition-all rounded-[10px] flex  items-center flex-col pt-5 gap-3 overflow-y-visible overflow-x-hidden no-scrollbar pb-5 border-[2px]'>
             {invitToPlay && invitToPlay.map((notif: any, index: any) =>
-              <>
+              <React.Fragment key={index}>
                 {notif.status === "Pending" ? (
                   <>
 
@@ -203,11 +202,11 @@ export default function SearchPanel() {
                     )}
                   </>
                 ) : false}
-              </>
+              </React.Fragment>
             )}
 
             {myNotification && myNotification.map((notif: any, index: any) =>
-              <>
+              <React.Fragment key={index}>
                 {notif.status === "Pending" ? (
                   <>
 
@@ -312,7 +311,7 @@ export default function SearchPanel() {
                       )
                     }
 
-              </>
+              </React.Fragment>
             )}
           </div>
         )}

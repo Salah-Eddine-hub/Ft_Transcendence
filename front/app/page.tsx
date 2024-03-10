@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function FirstPage() {
 
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center" style={{backgroundImage: `url(/hh1.jpg)`}}>
       <h1 className="text-5xl pb-3 text-white font-bold text-center"> PingPong </h1>

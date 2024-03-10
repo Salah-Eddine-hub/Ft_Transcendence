@@ -40,7 +40,7 @@ export default function Page(props: any) {
 
   const token = Cookies.get("JWT_TOKEN");
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
   useEffect(() => {
     const fetchChatGroups = async () => {
 
@@ -230,7 +230,8 @@ export default function Page(props: any) {
           message: `announcement ${userData.username} has set this room to Protected`,
           roomId: groupData?.id,
           userId: userData.id,
-          password: Password
+          password: Password,
+          token: Cookies.get('JWT_TOKEN')
         };
       const response = await axios.post(`${url}/chat/setRoomToProtected`, data, { withCredentials: true });
       
@@ -290,6 +291,11 @@ const Play = async (tar:any):Promise<void> =>
       }
     });
     socket.emit('accepted_request', { key: userData.id, value: tar });
+
+    router.push({
+      pathname: '../Play',
+      query: { tar: tar},
+    });
   }
 
   useEffect(() => {
@@ -346,9 +352,9 @@ const Play = async (tar:any):Promise<void> =>
                       :
                       (
                         <div className='rounded-[20px] w-[200px] h-[140px] top-[90px] right-8 absolute mr-[10px] flex flex-col items-center justify-evenly border-[1px] bg-white'>
-                          <Link href="../Play">
+
                             <button className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px] ' onClick={() => Play(groupData.members[0].id)}>Invite to Play</button>
-                          </Link>
+
                           <Link href={`/Profile/${groupData.members[0].id}`} className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px]'> visit profile </Link>
                         </div>
                       )

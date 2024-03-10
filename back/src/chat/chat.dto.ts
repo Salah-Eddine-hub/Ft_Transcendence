@@ -53,6 +53,10 @@ export class ChangeToProtected {
   @IsNotEmpty()
   @Length(4, 16)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
 }
 
 export class ChangeProtectedChannelPassword {

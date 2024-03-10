@@ -9,7 +9,7 @@ export default function Achievements({userId}: {userId: any}) {
 
     const [achievement, setAchievement] = useState<any>([]);
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
     useEffect(() => { const achievement = async () => {
       try{

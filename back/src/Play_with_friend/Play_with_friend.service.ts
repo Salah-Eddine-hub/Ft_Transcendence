@@ -80,8 +80,6 @@ export class GameService {
             status: 'accepted',
           },
         });
-        if (invite)
-          console.log("hada howa lisft lik l invite:",invite.senderId);
       } catch (error) {
         console.error('Error finding sender:', error);
       }
@@ -90,7 +88,6 @@ export class GameService {
     findIndexBySenderId(games :Game[],id:string, map:Map<string,string>):number
     {
       let result : number = -1;
-      console.log("dkhal");
       const index = Object.keys(games);
 
       
@@ -99,7 +96,7 @@ export class GameService {
       {
         if(!games[index[i]].players[0].opponent_id)
           continue;
-        //console.log("--->[",games[index[i]].players[0].opponent_id, id , map.get(id) , games[index[i]].players[0].db_id,"]---<");
+        console.log("---[",games[index[i]].players[0].opponent_id, id, map.get(id), games[index[i]].players[0].db_id,"]---");
         if(games[index[i]].players[0].opponent_id === id && map.get(id) === games[index[i]].players[0].db_id)
         {
           //map.delete(id);
@@ -112,12 +109,12 @@ export class GameService {
 
     async getReceiverIdBySenderId(senderId: string,player:Player[],opponents:string[]):Promise<void> {
       try {
+        console.log("senderId:",senderId);
         const invite = await this.prisma.inviteToPlay.findFirst({
           where: {
             senderId: senderId
           }
         });
-        console.log("invite back ndakhel opponents_id",invite);
         if (invite) {
           player[0].opponent_id = invite.receiverId;
           opponents.push(invite.receiverId);
@@ -260,14 +257,14 @@ export class GameService {
                 game[i].players[1].score = 5;
                 game[i].players[0].giveUp = true;
                 server.to(roomId[0]).emit("winner",game[i].players[1].name);
-                this.addGameResult(game[i].players, game[i].players[1].db_id,false);
+                //this.addGameResult(game[i].players, game[i].players[1].db_id,false);
               }
               else
               {
                 game[i].players[0].score = 5;
                 game[i].players[1].giveUp = true;
                 server.to(roomId[0]).emit("winner",game[i].players[0].name);
-                this.addGameResult(game[i].players, game[i].players[0].db_id,true);
+                //this.addGameResult(game[i].players, game[i].players[0].db_id,true);
               }
             }
             data_map.forEach((value, key) => {
@@ -285,12 +282,10 @@ export class GameService {
         }
         else
         {
-          //console.log("player in the game removed",game[i].players[0]);
           if(game[i].players[0])
           {
             if (game[i].players[0].id === id && game[i].players.length == 1)
             {
-              //console.log("delet from map",game[i].players[0].opponent_id, game[i].players[0].db_id);
               data_map.forEach((value, key) => {
                 if (key === game[i].players[0].opponent_id && value === game[i].players[0].db_id) {
                   data_map.delete(key);
@@ -335,9 +330,9 @@ export class GameService {
       let collisionResult = this.collision(ball, canvas, players);
       if (collisionResult) {
         if (ball.x < canvas.width / 2)
-          ball.velocityX = 1.05 * Math.abs(ball.velocityX);
+          ball.velocityX =  Math.abs(ball.velocityX);
         else
-          ball.velocityX = -1.05 * Math.abs(ball.velocityX);
+          ball.velocityX = -1 * Math.abs(ball.velocityX);
       }
        if (players[0] && players[1])
        {

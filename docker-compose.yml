@@ -12,10 +12,6 @@ services:
     restart: always
     ports:
       - "5432:5432"
-    # environment:
-    #   POSTGRES_PASSWORD: mazino
-    #   POSTGRES_USER: mazino
-    #   POSTGRES_DB: PGdb
     env_file:
       - back/.env
     networks:
@@ -47,7 +43,9 @@ services:
       dockerfile: Dockerfile
     container_name: front
     ports:
-      - "3000:3000"
+      - "3000:3000"    
+    env_file:
+      - front/.env
     # environment:
     #   - BACK_IP=back
     depends_on:

@@ -149,17 +149,16 @@ export class ChatController {
   }
 
   @Post('/setRoomToProtected')
-  async changeRoomToProtected(@Body() payload: ChangeToProtected) {
+  async changeRoomToProtected(@Req() request:any ,@Body() payload: ChangeToProtected) {
     const roomData = await this.chatService.getRoom(payload.roomId);
     if (!roomData) return;
 
     const user = await this.userService.getUser(payload.userId);
     if (!user) return;
-
+    
     payload.password = await bcrypt.hash(payload.password, this.saltOrRounds);
-
+    
     await this.chatService.setRoomToProtected(payload.roomId, payload.password);
-    this.eventEmitter.emit('setRoomToProtected', "lkhwa", payload, roomData.name);
+    this.eventEmitter.emit('setRoomToProtected', "lkhwa", payload, payload.roomId);
   }
-
 }

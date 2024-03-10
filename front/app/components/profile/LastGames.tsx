@@ -16,7 +16,7 @@ export default function LastGames({userId} : {userId: any}) {
     setData(profilepic);
   }, [profilepic]);
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
   useEffect(() => {const listFriends = async () => {
     try {

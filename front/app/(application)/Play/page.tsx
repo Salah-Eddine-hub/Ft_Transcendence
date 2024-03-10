@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectProfileInfo } from '@/redux/features/profile/profileSlice';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 
 export default function page() {
@@ -22,22 +24,23 @@ export default function page() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
     const [score1,setScore1] = useState<number>(0)
     const [score2,setScore2] = useState<number>(0)
-    const [playerWinnes, setPlayerWinnes] = useState<boolean>(false);
+    const {slug} = useParams();
     const [computerWinnes, setComputerWinnes] = useState<boolean>(false);
     const [winning, setWinning] = useState<boolean>(false);
     const [playAgain, setPlayAgain] = useState<boolean>(false);
-
+    
     const [net, setNet] = useState<Net>()
     const [player, setPlayer] = useState<Player>()
     const [computer, setComputer] = useState<Player>()
     const [winnerName, setWinnerName] = useState<string>("");
-
+    
     const [firstName,setFirstName] = useState<string>("Player1");
     const [secondName,setSecondName] = useState<string>("Player2");
-
+    
     const [pic1,setPic1] = useState<string>("");
+    const [playerWinnes, setPlayerWinnes] = useState<boolean>(false);
     const [pic2,setPic2] = useState<string>("");
-
+    
     const myData = useSelector(selectProfileInfo);
 
 
@@ -214,7 +217,7 @@ export default function page() {
           setWinnerName(name);
     }
 
-  const url = process.env.API_BASE_URL 
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
     const fetchData = async () => {
       try {
@@ -269,7 +272,12 @@ export default function page() {
     })
 
     useEffect(() => {
-        const token = Cookies.get('JWT_TOKEN');
+      const token = Cookies.get('JWT_TOKEN');
+
+        // const tar = router.query.tar;
+        console.log("***",slug);
+
+        // console.log("tar",tar);
 
         for(let i : number = 0; i < 2e9; i++ )
         {
@@ -279,7 +287,8 @@ export default function page() {
           path: '/play',
           query: {
             token: token,
-            id: myData.id
+            id: myData.id,
+            // tar: tar,
           }
         });
         setSocket(newSocket);
@@ -344,3 +353,4 @@ export default function page() {
     </div>
   )
 }
+
