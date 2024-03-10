@@ -27,6 +27,7 @@ services:
       interval: 40s
       timeout: 5s
       retries: 5
+    restart: always
     ports:
       - "4000:4000"
     env_file:
@@ -42,12 +43,11 @@ services:
       context: ./front
       dockerfile: Dockerfile
     container_name: front
+    restart: always
     ports:
       - "3000:3000"    
     env_file:
       - front/.env
-    # environment:
-    #   - BACK_IP=back
     depends_on:
       back:
         condition: service_healthy

@@ -96,7 +96,7 @@ const TeamCard = ({
       </div>
       {!isMyId && isFriend ? (
         <div className="w-full flex justify-center items-center gap-[16px] ">
-           <Link href="../Play" onClick={() => Play(userId)}
+           <Link href={`/Play/${userId}`} onClick={() => Play(userId)}
            className="rounded-[10px] cursor-pointer w-[60%] bg-[#d3dafb] h-[40px] flex  items-center justify-center hover:bg-[#c3cdfb] ">
           <button className=" rounded-[10px] cursor-pointer w-[60%] bg-[#d3dafb] h-[40px] flex flex-row-reverse items-center justify-center gap-[8px] hover:bg-[#c3cdfb]">
             <div className="">

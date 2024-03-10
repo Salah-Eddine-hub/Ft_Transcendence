@@ -146,7 +146,7 @@ export default function Home() {
                               </div>
                             </div>
                             <div className="flex mt-4 md:text-[16px] text-[12px] sm:text-[14px] md:w-[120px] w-max-content">
-                              <Link href="../Play" onClick={() => Play(value.id)}>
+                              <Link href={`/Play/${value.id}`} onClick={() => Play(value.id)}>
                                 <button className=" md:w-[120px] w-max-content px-3 h-[45px] hover:bg-[#4f587d] bg-[#6E7AAE] text-[#D7D7D7] rounded-[15px] ml-6" >
                                   Invite
                                 </button>

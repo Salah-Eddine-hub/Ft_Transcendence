@@ -30,7 +30,7 @@ export class RandomFriendGateway implements OnGatewayDisconnect {
     const token:any = socket.handshake.query.token;
     const token_id = this.gameService.getUserInfosFromToken(token);
     const user = await this.userService.getUser(token_id.sub);
-
+    if (!user) return;
     const existingUser = Array.from(this.connectedUsers.values());
     if (existingUser.includes(token_id.sub) || user.status === "inGame") {
       socket.emit("already_in_game");

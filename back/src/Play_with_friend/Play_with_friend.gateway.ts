@@ -37,17 +37,16 @@ export class PlayFriendGateway implements OnGatewayDisconnect {
 
     const token:any = socket.handshake.query.token;
     const senderId:any = socket.handshake.query.id;
+    const tar:any = socket.handshake.query.tar;
     
     if (token && token == "token_data")
     {
       
-      const tar:any = socket.handshake.query.tar;
       this.acc_rqst.set(tar,senderId);
       return;
     }
     else if (token && token == "token_d")
     {
-      const tar:any = socket.handshake.query.tar;
       const send:any = socket.handshake.query.send;
       
       status.set(send,"yes");
@@ -74,7 +73,6 @@ export class PlayFriendGateway implements OnGatewayDisconnect {
     const index: any = this.gameService.findIndexBySenderId(this.game,senderId,this.acc_rqst);
     if (index != -1 && (status.get(token_id.sub) === "yes"))
     {
-      console.log("join a game");
       status.set(token_id.sub, "no");
       const availibleRoomId = Object.keys(this.game[index].rooms).find(roomId => this.game[index].rooms[roomId].length == 1);
       if(!availibleRoomId) return;
@@ -95,14 +93,13 @@ export class PlayFriendGateway implements OnGatewayDisconnect {
     }
     else
     {
-      console.log("new game");
       const newRoomId = socket.id;
       this.rooms[newRoomId] = [socket.id];
       socket.join(newRoomId);
       
-      this.players.push({id: newRoomId, playerNb: 1, x:0, y: 175,score: 0,width: 20, height: 100,name: "player1",giveUp:false,db_id: senderId,pic: "", g_id: "",opponent_id:""});
+      this.players.push({id: newRoomId, playerNb: 1, x:0, y: 175,score: 0,width: 20, height: 100,name: "player1",giveUp:false,db_id: senderId,pic: "", g_id: "",opponent_id: tar});
       const index = Object.keys(this.players);
-      await this.gameService.getReceiverIdBySenderId(senderId,this.players,this.opponents);
+      //await this.gameService.getReceiverIdBySenderId(senderId,this.players,this.opponents);
       let newBall:Ball = {...this.ball};
       const newGame: Game = {
         nb: this.id,

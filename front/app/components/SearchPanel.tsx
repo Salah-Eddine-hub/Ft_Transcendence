@@ -193,7 +193,7 @@ export default function SearchPanel() {
                           </div>
                         </div>
                         <div className='flex flex-col sm:flex-row gap-1 pr-3'>
-                          <Link href="../Play">
+                          <Link href={`../Play/${notif.senderId}`}>
                             <button className='rounded-[8px] h-[28px] w-[84px] text-[14px] flex items-center justify-center text-white  font-semibold hover:scale-[1.05] transition-all duration-500 hover:bg-[#7449c0] bg-[#7239D3]' onClick={() => acceptInvitToPlay(notif)}>accept</button>
                           </Link>
                           <button className='rounded-[8px] h-[28px] w-[84px] text-[14px] flex items-center justify-center text-[#452b72]  font-semibold hover:scale-[1.05] transition-all duration-500 hover:bg-[#d9d8db]  bg-[#e5e2e9]' onClick={() => declineInvitToPlay(notif)}>decline</button>

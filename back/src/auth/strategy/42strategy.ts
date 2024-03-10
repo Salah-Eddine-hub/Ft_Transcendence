@@ -41,7 +41,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
             }
             return user;
         } catch (error) {
-            console.error('Error in FortyTwo authentication:', error);
+            // console.error('Error in FortyTwo authentication:', error);
             throw new UnauthorizedException('Failed to authenticate with FortyTwo');
         }
     }

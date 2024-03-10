@@ -5,6 +5,7 @@ import axios from 'axios';
 function AuthWrapper({ children }: { children: React.ReactNode }) {
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+  const frontUrl = process.env.SERVER_FRONTEND || "http://localhost:3000";
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const router = useRouter();
     useEffect(() => {
@@ -15,13 +16,13 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
                             if (res) {
                                 setIsAuthenticated(true);
                             } else {
-                                router.push(`${url}`);
+                                router.push(`${frontUrl}`);
                             }
                     }).catch(() => {
-                        router.push(`${url}`);
+                        router.push(`${frontUrl}`);
                     });
                 } catch {
-                router.push(`${url}`);
+                router.push(`${frontUrl}`);
                 }
         }
         fetchData();

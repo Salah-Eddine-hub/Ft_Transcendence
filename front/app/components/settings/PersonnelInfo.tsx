@@ -95,13 +95,10 @@ export default function PersonnelInfo() {
       };
 
       
-      const res = await axios.post(
-        `${url}/user/changeInfos`,
-        updatedProfileData
+      const res = await axios.post(`${url}/user/changeInfos`, updatedProfileData
         );
         
-        dispatch(setProfileData(
-        {...profileSelector,updatedProfileData}));
+        dispatch(setProfileData({  ...profileSelector,...updatedProfileData}));
       toast.success("Your information has been changed successfully");
     } catch (error:any) {
       if (error.response.status === 400 || error.response.status === 401) {

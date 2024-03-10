@@ -96,7 +96,6 @@ export class GameService {
       {
         if(!games[index[i]].players[0].opponent_id)
           continue;
-        console.log("---[",games[index[i]].players[0].opponent_id, id, map.get(id), games[index[i]].players[0].db_id,"]---");
         if(games[index[i]].players[0].opponent_id === id && map.get(id) === games[index[i]].players[0].db_id)
         {
           //map.delete(id);
@@ -109,7 +108,6 @@ export class GameService {
 
     async getReceiverIdBySenderId(senderId: string,player:Player[],opponents:string[]):Promise<void> {
       try {
-        console.log("senderId:",senderId);
         const invite = await this.prisma.inviteToPlay.findFirst({
           where: {
             senderId: senderId

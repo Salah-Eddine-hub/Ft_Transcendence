@@ -290,12 +290,13 @@ const Play = async (tar:any):Promise<void> =>
         tar: tar
       }
     });
-    socket.emit('accepted_request', { key: userData.id, value: tar });
 
-    router.push({
-      pathname: '../Play',
-      query: { tar: tar},
-    });
+    // router.push({
+    //   pathname: '/Play',
+    //   query: { tar: tar, },
+    // });
+
+    socket.emit('accepted_request', { key: userData.id, value: tar });
   }
 
   useEffect(() => {
@@ -352,9 +353,9 @@ const Play = async (tar:any):Promise<void> =>
                       :
                       (
                         <div className='rounded-[20px] w-[200px] h-[140px] top-[90px] right-8 absolute mr-[10px] flex flex-col items-center justify-evenly border-[1px] bg-white'>
-
+                          <Link href={`/Play/${groupData.members[0].id}`} >
                             <button className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px] ' onClick={() => Play(groupData.members[0].id)}>Invite to Play</button>
-
+                          </Link>
                           <Link href={`/Profile/${groupData.members[0].id}`} className='font-normal text-[22px] hover:text-[#7583b9] text-[#4e5c95] font-sans-only flex justify-center items-center hover:border-l hover:border-r border-white rounded-tr-[20px] rounded-tl-[20px] gap-[10px]'> visit profile </Link>
                         </div>
                       )

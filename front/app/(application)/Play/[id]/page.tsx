@@ -1,16 +1,15 @@
 "use client";
 import { io, Socket } from '@/../../node_modules/socket.io-client/build/esm/index';
 import React, { useEffect, useRef, useState } from 'react'
-import { Winner } from '../../components/game/Winner';
+import { Winner } from '../../../components/game/Winner';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectProfileInfo } from '@/redux/features/profile/profileSlice';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
 
 
-export default function page() {
+export default function page(props: any) {
+
 
     const [socket,setSocket] = useState<Socket>()
     const [text,setText] = useState<string>("")
@@ -24,7 +23,7 @@ export default function page() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
     const [score1,setScore1] = useState<number>(0)
     const [score2,setScore2] = useState<number>(0)
-    const {slug} = useParams();
+
     const [computerWinnes, setComputerWinnes] = useState<boolean>(false);
     const [winning, setWinning] = useState<boolean>(false);
     const [playAgain, setPlayAgain] = useState<boolean>(false);
@@ -42,6 +41,7 @@ export default function page() {
     const [pic2,setPic2] = useState<string>("");
     
     const myData = useSelector(selectProfileInfo);
+
 
 
     const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -274,11 +274,6 @@ export default function page() {
     useEffect(() => {
       const token = Cookies.get('JWT_TOKEN');
 
-        // const tar = router.query.tar;
-        console.log("***",slug);
-
-        // console.log("tar",tar);
-
         for(let i : number = 0; i < 2e9; i++ )
         {
           i *= 1;
@@ -288,7 +283,7 @@ export default function page() {
           query: {
             token: token,
             id: myData.id,
-            // tar: tar,
+            tar: props.params.id,
           }
         });
         setSocket(newSocket);
