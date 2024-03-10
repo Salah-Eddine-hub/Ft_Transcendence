@@ -66,10 +66,8 @@ export default function page() {
     },[playAgain])
 
     function getMouesPosition(e:any, canvas: HTMLCanvasElement):any {
-      console.log(e);
       var mouseX = e * canvas.width / canvas.clientWidth | 0;
       var mouseY = e * canvas.height / canvas.clientHeight | 0;
-      console.log("[",mouseX,mouseY,"]");
       return {x: mouseX, y: mouseY};
     }
     interface Ball{
@@ -216,10 +214,11 @@ export default function page() {
           setWinnerName(name);
     }
 
+  const url = process.env.API_BASE_URL 
 
     const fetchData = async () => {
       try {
-      const response = await axios.get('http://localhost:4000/user/me', {withCredentials: true});
+      const response = await axios.get(`${url}/user/me`, {withCredentials: true});
       const userData = response.data.user;
       socket?.emit("user_id",userData.id);
       } catch (error) {
@@ -234,7 +233,6 @@ export default function page() {
           setText("freind has join");
           if (divv.current)
           {
-            console.log("remove div");
             divv.current.style.display = 'none';
             fetchData();
           }
@@ -250,7 +248,6 @@ export default function page() {
           canv = canvasRef.current;
           if(canv)
           {
-            console.log("start the game");
             setCanvas(canv)
             setCtx(canv.getContext('2d'))
           }
@@ -272,11 +269,13 @@ export default function page() {
     })
 
     useEffect(() => {
-        console.log("send connection");
         const token = Cookies.get('JWT_TOKEN');
-        console.log("connected3")
 
-        const newSocket = io("http://localhost:4000",{
+        for(let i : number = 0; i < 2e9; i++ )
+        {
+          i *= 1;
+        }
+        const newSocket = io(`${url}`,{
           path: '/play',
           query: {
             token: token,
@@ -284,7 +283,6 @@ export default function page() {
           }
         });
         setSocket(newSocket);
-        console.log("newSocket", newSocket);
 
         setStart(true);
         setText("wait for freind to join");

@@ -49,12 +49,9 @@ export class RandomFriendGateway implements OnGatewayDisconnect {
       this.rooms[availibleRoomId].push(socket.id);
       socket.join(availibleRoomId);
       this.server.to(availibleRoomId).emit("start");
-      //
       this.id = this.game.length;
       if (this.players[this.id] && this.players[this.id].length == 1)
         this.players[this.id].push({id: socket.id, playerNb: 2, x: 880, y: 175 ,score:0, width: 20, height: 100,name:"player2",giveUp: false,db_id: token_id.sub,pic: "",g_id: ""});
-      // console.log("------------players-Data-------------",this.id);
-      // console.log(this.players);
       const newGame: Game = {
         nb: this.id,
         ball: newBall,

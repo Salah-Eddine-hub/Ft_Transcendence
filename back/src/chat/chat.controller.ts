@@ -29,9 +29,7 @@ export class ChatController {
       throw new BadRequestException('Name already taken')
 
     if (chatGroup.password) {
-      console.log("chatGroup.password", chatGroup.password);
       chatGroup.password = await bcrypt.hash(chatGroup.password, this.saltOrRounds);
-      console.log("chatGroup.password", chatGroup.password);
 
     }
     return await this.chatService.createGroup(chatGroup);
@@ -140,17 +138,13 @@ export class ChatController {
   async changeRoomPassword(@Body() payload: ChangeProtectedChannelPassword) {
 
     const roomData = await this.chatService.getRoom(payload.roomId);
-    console.log("roomI1d", payload.roomId);
     
 
     if (roomData && (await bcrypt.compare(payload.password, roomData.password)))
       throw new BadRequestException("Can't set the new password to the cuurent one. Chose a different Password")
 
-      console.log("roomId2", payload.roomId);
     payload.password = await bcrypt.hash(payload.password, this.saltOrRounds);
-    console.log("roomId3", payload.roomId);
     await this.chatService.changeRoomPassword(payload.roomId, payload.password);
-    console.log("roomId4", payload.roomId);
     this.eventEmitter.emit("changeRoomPassword");
   }
 

@@ -44,7 +44,6 @@ export class PlayFriendGateway implements OnGatewayDisconnect {
       
       const tar:any = socket.handshake.query.tar;
       this.acc_rqst.set(tar,senderId);
-      console.log("maaaaaap",this.acc_rqst);
       return;
     }
     else if (token && token == "token_d")

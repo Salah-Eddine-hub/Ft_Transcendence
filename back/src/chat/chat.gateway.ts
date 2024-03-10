@@ -3,6 +3,7 @@ import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat.service';
 import { OnEvent } from '@nestjs/event-emitter';
 import * as bcrypt from 'bcrypt';
+import { verify } from "jsonwebtoken";
 
 @WebSocketGateway(
   {
@@ -20,6 +21,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('sendMessage')
   async handleSendMessage(client: Socket, payload: any) {
+    try {
+      
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     const roomData = await this.chatService.getRoom(payload.roomId);
     if (!roomData) return;
     
@@ -37,6 +44,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('joinGroupChat')
   async handleJoiningGroupChat(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     if (await this.chatService.checkIfBanned(payload.userId, payload.groupId) === 1) {
       client.emit("banned", `You are banned on that channel`);
       return;
@@ -61,6 +73,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('kick')
   async kick(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     payload.message = `announcement ${payload.username} has kicked ${payload.target_username} from this room`
     if (await this.chatService.kickUserFromRoom(payload.target, payload.roomId) === -1) return
     await this.handleSendMessage(client, payload)
@@ -71,8 +88,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('mute')
   async Mute(client: Socket, payload: any) {
-    console.log("payload.username", payload.username);
-    console.log("payload.username", payload);
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     
     payload.message = `announcement ${payload.username} has muted ${payload.target_username}`
     const timestampIn60Seconds = new Date();
@@ -85,6 +105,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('ban')
   async Ban(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     payload.message = `announcement ${payload.username} has banned ${payload.target_username}`
     await this.chatService.banUserFromRoom(payload.target, payload.roomId)
     await this.handleSendMessage(client, payload)
@@ -95,10 +120,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('unmute')
   async Unmute(client: Socket, payload: any) {
-    console.log("hh h h h h h");
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     
     if (await this.chatService.checkIfMuted(payload.target, payload.roomId) !== 1){ 
-      console.log("hh h h h h h222222");
       this.server.to(payload.roomId).emit("alreadyUnmuted", payload.userId);
       return;
     }
@@ -110,6 +138,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('makeAdmin')
   async makeAdmin(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     payload.message = `announcement ${payload.target_username} in now an admin on this room`
     await this.chatService.makeAdminOnRoom(payload.target, payload.roomId)
     await this.handleSendMessage(client, payload)
@@ -118,6 +151,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('removeAdmin')
   async removeAdmin(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     payload.message = `announcement ${payload.target_username} in no longer an admin on this room`
     await this.chatService.removeAdminOnRoom(payload.target, payload.roomId)
     await this.handleSendMessage(client, payload)
@@ -128,6 +166,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('setRoomToPublic')
   async setRoomToPublic(client: Socket, payload: any) {
     
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     const roomData = await this.chatService.getRoom(payload.roomId);
     if (!roomData) return;
     
@@ -139,6 +182,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @OnEvent('setRoomToProtected')
   async setRoomToProtected(client: Socket, payload: any, roomName:string) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+    } catch (error) {
+      return;
+    }
     const roomData = await this.chatService.getRoom(payload.roomId);
     if (!roomData) return;
     await this.handleSendMessage(client, payload)
@@ -149,59 +197,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @OnEvent('changeRoomPassword')
   async changePassword() {
-    console.log("hna 2");
-      console.log("hna 1");
-      
       this.server.emit('refreshJoinComp');
   }
 
   @SubscribeMessage('leave')
   async leave(client: Socket, payload: any) {
+    try {
+      verify(payload.token, `${process.env.SECRET_KEY}`);
+      
+    } catch (error) {
+      return;
+    }
     payload.message = `announcement ${payload.username} has left the room`
     await this.chatService.kickUserFromRoom(payload.userId, payload.roomId)
     await this.handleSendMessage(client, payload)
-    this.server.emit('refresh');
+    this.server.emit('left');
   }
 
   @SubscribeMessage('addSocketToThisUserRoom')
-  async addSocketToThisUserRoom(client: Socket, userId: any) {
-    const rooms = await this.chatService.getGroupsByUserId(userId);
-    if (rooms) {
-      rooms.map((room) => {
-        client.join(room.id);
-      })
-    }
+  async addSocketToThisUserRoom(client: Socket, roomId: any) {
+        client.join(roomId);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   handleConnection(client: any) {
   }
